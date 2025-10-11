@@ -1,35 +1,35 @@
-export const slimeNamePart1: Record<number, string> = {
-    1: 'Xlar',
-    2: 'Glo',
-    3: 'Zlo',
-    4: 'Dlaba',
-    5: 'Y\'',
-    6: 'Bli'
+export const slimeColor: Record<number, string> = {
+    1: 'clear',
+    2: 'green',
+    3: 'amber',
+    4: 'purple',
+    5: 'blue',
+    6: 'pink'
 }
 
-export const slimeNamePart2: Record<number, string> = {
-    1: 'r-b',
-    2: 'lg',
-    3: 'bl',
-    4: 'rg',
-    5: 'lb',
-    6: 'gl'
+export const slimeAccent: Record<number, string> = {
+    1: 'white',
+    2: 'red',
+    3: 'gray',
+    4: 'iridescent',
+    5: 'yellow',
+    6: 'orange'
 }
 
-export const slimeNamePart3: Record<number, string> = {
-    1: 'aba',
-    2: '-oro',
-    3: 'ugg',
-    4: 'örr',
-    5: 'ebl',
-    6: 'igg'
+export const slimeTexture: Record<number, string> = {
+    1: 'smooth',
+    2: 'bubbly',
+    3: 'oily',
+    4: 'fleshy',
+    5: 'sticky',
+    6: 'rubbery'
 }
 
-export const slimeNamePart4: Record<number, string> = {
-    1: 'lugg',
-    2: 'debl',
-    3: '-slurp',
-    4: 'leth',
-    5: 'glor',
-    6: 'blo'
+export const slimePattern: Record<number, string> = {
+    1: 'layered',
+    2: 'speckled',
+    3: 'lined',
+    4: 'uniform',
+    5: 'veined',
+    6: 'blotchy'
 }

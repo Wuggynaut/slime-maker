@@ -1,7 +1,7 @@
-import { rollDice } from './diceroller';
+import { rollDice } from './diceRoller';
 import {
     slimeNamePart1, slimeNamePart2, slimeNamePart3, slimeNamePart4
-} from '../data/slimetraits';
+} from '../data/slimeNames';
 
 export function generateSlimeName(): string {
     const part1 = slimeNamePart1[rollDice('1d6')];

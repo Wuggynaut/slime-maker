@@ -1,14 +1,12 @@
 import './App.css'
-import { Diceroller } from './Diceroller'
-import { generateSlimeName } from './utils/slimeNameGenerator'
+import { GenerateSlime } from './GenerateSlime'
 
 function App() {
 
 
   return (
     <>
-      <h3>Your slime name is</h3>
-      <h1>{generateSlimeName()}</h1>
+      <GenerateSlime />
     </>
   )
 }
