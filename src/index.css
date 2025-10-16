@@ -1,5 +1,5 @@
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Gentium Book Basic', serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -60,9 +60,13 @@ body {
   min-height: 100vh;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Oswald', sans-serif;
 }
 
 button {
@@ -71,10 +75,14 @@ button {
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
-  font-family: inherit;
+  font-family: 'Oswald', sans-serif;
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+}
+
+strong {
+  font-family: 'Oswald', sans-serif;
 }
 
 .icon-button {
@@ -96,6 +104,17 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (max-width: 768px) {
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .left-col,
+  .right-col {
+    grid-column: 1;
+  }
 }
 
 @media (prefers-color-scheme: light) {
