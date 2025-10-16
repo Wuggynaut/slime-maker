@@ -46,6 +46,18 @@ button {
   transition: border-color 0.25s;
 }
 
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.icon-button:hover {
+  color:#4e4e4e;
+  border-radius: 4px;
+}
+
 button:hover {
   border-color: #646cff;
 }

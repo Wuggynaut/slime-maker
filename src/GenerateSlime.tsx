@@ -1,15 +1,16 @@
 import { slimeTitles } from './data/slimeTitles';
-import { slimeAccent, slimeColor, slimePattern, slimeTexture } from './data/slimeTraits'
-import { rollD6, rollDice } from './utils/diceRoller'
-import { generateSlimeName } from './utils/slimeNameGenerator'
-
+import { slimeAccent, slimeColor, slimePattern, slimeTexture } from './data/slimeTraits';
+import { rollD6, rollDice } from './utils/diceRoller';
+import { generateSlimeName } from './utils/slimeNameGenerator';
 import {
     physicalSkills,
     socialSkills,
     knowledgeSkills,
     type Skill
-} from './data/slimeSkills'
+} from './data/slimeSkills';
 import { useEffect, useState } from 'react';
+import { RerollButton } from './utils/RerollButton';
+import { FaDice } from "react-icons/fa";
 
 export function GenerateSlime() {
 
@@ -25,7 +26,7 @@ export function GenerateSlime() {
     const [skills, setSkills] = useState<Skill[]>([]);
     const [weaknesses, setWeaknesses] = useState<Skill[]>([]);
 
-    const regenerate = () => {
+    const regenerateSlime = () => {
         setTraits({
             name: generateSlimeName(),
             color: slimeColor[rollD6()],
@@ -47,11 +48,16 @@ export function GenerateSlime() {
         }
     }
 
-    useEffect(() => {
-
+    const regenerateSkills = (mode: 'skills' | 'weaknesses' | 'all') => {
         const newSkills: Skill[] = [];
         const newWeaknesses: Skill[] = [];
         const usedSkills: Skill[] = [];
+
+        if (mode === 'skills') {
+            weaknesses.forEach(s => usedSkills.push(s));
+        } else if (mode === 'weaknesses') {
+            skills.forEach(s => usedSkills.push(s));
+        }
 
         const uniqueSkill = (category: Record<number, Skill>): Skill => {
             let skill: Skill;
@@ -76,40 +82,49 @@ export function GenerateSlime() {
             newWeaknesses.push(uniqueSkill(randomCategory()));
         }
 
-        switch (traits.title.name) {
-            case 'Sabotage Slime':
-                twoFromCategoryPlusRandom(physicalSkills);
-                threeRandomWeaknesses();
-                break;
-            case 'Infiltration Slime':
-                twoFromCategoryPlusRandom(socialSkills);
-                threeRandomWeaknesses();
-                break;
-            case 'Science Slime':
-                twoFromCategoryPlusRandom(knowledgeSkills);
-                threeRandomWeaknesses();
-                break;
-            case 'Surveillance Slime':
-                newSkills.push(physicalSkills[4]);
-                usedSkills.push(physicalSkills[4]);
-                newSkills.push(uniqueSkill(randomCategory()));
-                newSkills.push(uniqueSkill(randomCategory()));
-                threeRandomWeaknesses();
-                break;
-            case 'Embryonic Slime':
-                newSkills.push(uniqueSkill(physicalSkills));
-                newSkills.push(uniqueSkill(socialSkills));
-                newSkills.push(uniqueSkill(knowledgeSkills));
-                threeRandomWeaknesses();
-                break;
-            case 'Prince Slime':
-                threeRandomWeaknesses();
-                break;
+        if (mode === 'skills' || mode === 'all') {
+            switch (traits.title.name) {
+                case 'Sabotage Slime':
+                    twoFromCategoryPlusRandom(physicalSkills);
+                    break;
+                case 'Infiltration Slime':
+                    twoFromCategoryPlusRandom(socialSkills);
+                    break;
+                case 'Science Slime':
+                    twoFromCategoryPlusRandom(knowledgeSkills);
+                    break;
+                case 'Surveillance Slime':
+                    newSkills.push(physicalSkills[4]);
+                    usedSkills.push(physicalSkills[4]);
+                    newSkills.push(uniqueSkill(randomCategory()));
+                    newSkills.push(uniqueSkill(randomCategory()));
+                    break;
+                case 'Embryonic Slime':
+                    newSkills.push(uniqueSkill(physicalSkills));
+                    newSkills.push(uniqueSkill(socialSkills));
+                    newSkills.push(uniqueSkill(knowledgeSkills));
+                    break;
+                case 'Prince Slime':
+                    break;
+            }
         }
 
+        if (mode === 'weaknesses' || mode === 'all') {
+            threeRandomWeaknesses();
+        }
 
-        setSkills(newSkills);
-        setWeaknesses(newWeaknesses);
+        if (mode === 'all') {
+            setSkills(newSkills);
+            setWeaknesses(newWeaknesses);
+        } else if (mode === 'skills') {
+            setSkills(newSkills);
+        } else if (mode === 'weaknesses') {
+            setWeaknesses(newWeaknesses);
+        }
+    }
+
+    useEffect(() => {
+        regenerateSkills('all');
     }, [traits.title.name]);
 
     const getArticle = (word: string) =>
@@ -118,21 +133,29 @@ export function GenerateSlime() {
     return (
         <>
             <h3>You are</h3>
-            <h2><strong>{traits.name}</strong>,<br />the {traits.title.name}</h2>
+            <h2><strong>{traits.name}</strong>, <RerollButton onClick={() => setTraits({ ...traits, name: generateSlimeName() })} />
+                <br />the {traits.title.name} <RerollButton onClick={() => setTraits({ ...traits, title: slimeTitles[rollD6()] })} />
+
+            </h2>
             <p>{traits.title.description}</p>
             <h3>Description</h3>
-            <p>You are {getArticle(traits.color[0])} <strong>{traits.color}</strong> slime, patterned with <strong>{traits.accent}</strong>, <strong>{traits.pattern}</strong> accents, with {getArticle(traits.texture[0])} <strong>{traits.texture}</strong> surface</p>
-            <h3>You are skilled at</h3>
+            <p>You are {getArticle(traits.color[0])} <strong>{traits.color}</strong><RerollButton onClick={() => setTraits({ ...traits, color: slimeColor[rollD6()] })} />
+                slime, patterned with <strong>{traits.accent}</strong><RerollButton onClick={() => setTraits({ ...traits, accent: slimeAccent[rollD6()] })} />,
+                <strong> {traits.pattern}</strong><RerollButton onClick={() => setTraits({ ...traits, pattern: slimePattern[rollD6()] })} />
+                accents, with {getArticle(traits.texture[0])} <strong>{traits.texture}</strong><RerollButton onClick={() => setTraits({ ...traits, texture: slimeTexture[rollD6()] })} />
+                surface</p>
+            <h3>You are skilled at <RerollButton onClick={() => regenerateSkills('skills')} /></h3>
 
             {skills.length === 0 ? <p>Nothing</p> : <ul>{skills.map((s, index) => <li key={index}>{s.name}</li>)}</ul>}
 
-            <h3>You are weak at</h3>
+            <h3>You are weak at <RerollButton onClick={() => regenerateSkills('weaknesses')} /></h3>
 
             <ul>
                 {weaknesses.map((s, index) => <li key={index}>{s.name}</li>)}
             </ul>
 
-            <button onClick={() => regenerate()}>New Slime</button>
+
+            <button onClick={() => regenerateSlime()}><FaDice /> Reroll Slime</button>
         </>
     )
 }
