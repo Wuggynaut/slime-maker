@@ -91,6 +91,12 @@ strong {
   font-family: 'Oswald', sans-serif;
 }
 
+ul,
+ol {
+  padding-left: 1em;
+  margin-left: 0;
+}
+
 .icon-button {
   background: none;
   border: none;
