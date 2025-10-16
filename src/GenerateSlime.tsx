@@ -144,18 +144,23 @@ export function GenerateSlime() {
                 <strong> {traits.pattern}</strong><RerollButton onClick={() => setTraits({ ...traits, pattern: slimePattern[rollD6()] })} />
                 accents, with {getArticle(traits.texture[0])} <strong>{traits.texture}</strong><RerollButton onClick={() => setTraits({ ...traits, texture: slimeTexture[rollD6()] })} />
                 surface</p>
-            <h3>You are skilled at <RerollButton onClick={() => regenerateSkills('skills')} /></h3>
+            <div style={{ display: 'flex', gap: '128px' }}>
+                <div>
+                    <h3>You are skilled at <RerollButton onClick={() => regenerateSkills('skills')} /></h3>
+                    <ul>
+                        {skills.length === 0 ? <p>Nothing</p> : skills.map((s, index) => <li key={index}>{s.name}</li>)}
+                    </ul>
+                </div>
+                <div>
+                    <h3>You are weak at <RerollButton onClick={() => regenerateSkills('weaknesses')} /></h3>
 
-            {skills.length === 0 ? <p>Nothing</p> : <ul>{skills.map((s, index) => <li key={index}>{s.name}</li>)}</ul>}
+                    <ul>
+                        {weaknesses.map((s, index) => <li key={index}>{s.name}</li>)}
+                    </ul>
+                </div>
+            </div >
 
-            <h3>You are weak at <RerollButton onClick={() => regenerateSkills('weaknesses')} /></h3>
-
-            <ul>
-                {weaknesses.map((s, index) => <li key={index}>{s.name}</li>)}
-            </ul>
-
-
-            <button onClick={() => regenerateSlime()}><FaDice /> Reroll Slime</button>
+            <button style={{ marginTop: '32px', marginBottom: '16px' }} onClick={() => regenerateSlime()}><FaDice /> Reroll Slime</button>
         </>
     )
 }
