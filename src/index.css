@@ -13,6 +13,12 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .slime-sheet {
   max-width: 900px;
   padding: 20px;
@@ -107,8 +113,17 @@ button:focus-visible {
 }
 
 @media (max-width: 768px) {
+  .slime-sheet {
+    max-width: 100%;
+    padding: 0;
+    margin: 0;
+  }
+
   .content-grid {
     grid-template-columns: 1fr;
+    border-left: none;
+    border-right: none;
+    gap: 2px;
   }
 
   .left-col,
