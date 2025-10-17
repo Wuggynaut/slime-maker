@@ -85,6 +85,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  touch-action: manipulation;
 }
 
 strong {
@@ -102,6 +103,7 @@ ol {
   border: none;
   cursor: pointer;
   padding: 4px;
+  touch-action: manipulation;
 }
 
 .icon-button:hover {

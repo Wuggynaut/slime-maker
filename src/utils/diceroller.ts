@@ -21,6 +21,26 @@ export function rollD6(): number {
     return Math.floor(Math.random() * 6) + 1;
 }
 
+export function rollD4(): number {
+    return Math.floor(Math.random() * 4) + 1;
+}
+
+export function rollD8(): number {
+    return Math.floor(Math.random() * 8) + 1;
+}
+
+export function rollD10(): number {
+    return Math.floor(Math.random() * 10) + 1;
+}
+
+export function rollD12(): number {
+    return Math.floor(Math.random() * 12) + 1;
+}
+
+export function rollD20(): number {
+    return Math.floor(Math.random() * 20) + 1;
+}
+
 export function parseDieFormula(formula: string): DieGroup[] {
     const groups: DieGroup[] = [];
 
