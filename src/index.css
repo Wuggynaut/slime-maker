@@ -106,18 +106,30 @@ ol {
   touch-action: manipulation;
 }
 
-.icon-button:hover {
-  color: #4e4e4e;
-  border-radius: 4px;
-}
 
-button:hover {
-  border-color: #ffa074;
-}
 
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .icon-button:hover {
+    color: #4e4e4e;
+    border-radius: 4px;
+  }
+
+  button:hover {
+    border-color: #4e4e4e;
+    color: #4e4e4e;
+  }
+}
+
+@media (hover: none) {
+  .icon-button:hover {
+    color: #4e4e4e;
+    border-radius: 4px;
+  }
 }
 
 @media (max-width: 768px) {
