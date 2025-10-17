@@ -168,7 +168,7 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
             <section className='card right-col'>
                 <h2>Skills <RerollButton onClick={() => regenerateSkills('skills')} /></h2>
                 <ul>
-                    {skills.length === 0 ? <p>Nothing</p> : skills.map(s => <li key={s.name}>{s.name}</li>)}
+                    {skills.length === 0 ? <p>None</p> : skills.map(s => <li key={s.name}>{s.name}</li>)}
                 </ul>
                 <h2>Weaknesses <RerollButton onClick={() => regenerateSkills('weaknesses')} /></h2>
 
