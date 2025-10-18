@@ -1,6 +1,6 @@
 import './App.css'
 import { GenerateHost, type HostHandle } from './GenerateHost'
-//import { GenerateMission } from './GenerateMission';
+import { GenerateMission } from './GenerateMission';
 import { GenerateSlime, type SlimeHandle } from './GenerateSlime';
 import { useRef } from 'react';
 import { FaDice } from "react-icons/fa";
@@ -31,7 +31,7 @@ function App() {
         <GenerateSlime ref={slimeRef} />
         <GenerateHost ref={bodyRef} />
       </div>
-
+      <GenerateMission />
     </div >
   )
 }

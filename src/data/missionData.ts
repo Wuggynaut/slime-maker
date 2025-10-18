@@ -102,7 +102,7 @@ export const missionTargetObject: Record<number, TargetCategory> = {
         targets: [
             { id: 1, name: 'satellite network', validLocationCategories: [5, 6] },
             { id: 2, name: 'nuclear reactor', validLocationCategories: [5] },
-            { id: 3, name: 'hard drives' },
+            { id: 3, name: 'hard drive' },
             { id: 4, name: 'computer' },
             { id: 5, name: 'mining equipment', validLocationCategories: [5] },
             { id: 6, name: 'truck' },
@@ -129,7 +129,7 @@ export const missionTargetObject: Record<number, TargetCategory> = {
         name: 'cultural artifact',
         targets: [
             { id: 1, name: 'religious text' },
-            { id: 2, name: 'crown jewels', validLocationCategories: [1, 3] },
+            { id: 2, name: 'crown jewel', validLocationCategories: [1, 3] },
             { id: 3, name: 'painting' },
             { id: 4, name: 'statue' },
             { id: 5, name: 'family photo album' },
@@ -142,8 +142,8 @@ export const missionTargetObject: Record<number, TargetCategory> = {
         id: 4,
         name: 'evidence',
         targets: [
-            { id: 1, name: 'photographs' },
-            { id: 2, name: 'videotapes' },
+            { id: 1, name: 'photograph' },
+            { id: 2, name: 'videotape' },
             { id: 3, name: 'dead slime specimen', validLocationCategories: [2, 5, 6] },
             { id: 4, name: 'crashed space ship' },
             { id: 5, name: 'eye-witness account' },
@@ -284,20 +284,25 @@ export const missionLocation: Record<number, LocationCategory> = {
     }
 }
 
-export const missionLocationFeature: Record<number, string> = {
-    1: 'under construction',
-    2: 'special event',
-    3: 'emergency',
-    4: 'multi-level',
-    5: 'open-air',
-    6: 'historic building'
+export type Feature = {
+    name: string;
+    description: string;
 }
 
-export const missionComplication: Record<number, string> = {
-    1: 'time pressure',
-    2: 'unwanted attention',
-    3: 'technical malfunction',
-    4: 'high security',
-    5: 'identity crisis',
-    6: 'trap'
+export const missionLocationFeature: Record<number, Feature> = {
+    1: { name: 'under construction', description: 'Scaffolding, barriers, workers, and temporary access routes' },
+    2: { name: 'special event', description: 'Conference, celebration or a gathering in progress' },
+    3: { name: 'emergency', description: 'A fire, hostage situation, or some other emergency is in progress.' },
+    4: { name: 'multi-level', description: 'The location has a vertical layout, with multiple floors, elevators, and stairs' },
+    5: { name: 'open-air', description: 'Outdoor courtyards, walkways.' },
+    6: { name: 'historic building', description: 'Old architecture, narrow passages, dilapidation' }
+}
+
+export const missionComplication: Record<number, Feature> = {
+    1: { name: 'time pressure', description: 'Mission must be completed before a deadline or event' },
+    2: { name: 'unwanted attention', description: 'Media coverage, curious bystanders, or social media exposure' },
+    3: { name: 'technical malfunction', description: 'Equipment failure, system glitches, or infrastructure problems' },
+    4: { name: 'high security', description: 'The location is unusually well protected' },
+    5: { name: 'identity crisis', description: 'Someone at the location knows one of the host bodies' },
+    6: { name: 'trap', description: 'The mission is an ambush from humans who know the truth' }
 }
