@@ -75,6 +75,28 @@ h6 {
   font-family: 'Oswald', sans-serif;
 }
 
+@font-face {
+  font-family: 'KreepTown';
+  src: url('./fonts/KreepTown.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.header-title {
+  font-family: 'KreepTown', sans-serif;
+  font-size: 3rem;
+  color: #0c9947;
+  text-shadow:
+    -2px -2px 0 #f2dd1a,
+    2px -2px 0 #f2dd1a,
+    -2px 2px 0 #f2dd1a,
+    4px 4px 0 #f2dd1a,
+    -2px 0 0 #f2dd1a,
+    4px 0 0 #f2dd1a,
+    0 -2px 0 #f2dd1a,
+    0 4px 0 #f2dd1a;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid;

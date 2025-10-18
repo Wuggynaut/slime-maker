@@ -20,7 +20,7 @@ function App() {
   return (
     <div className='slime-sheet'>
       <div style={{ textAlign: 'center' }}>
-        <h1>THE SLIME MAKER</h1>
+        <h1 className='header-title'>THE SLIME MAKER</h1>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '10px', marginBottom: '20px', justifyContent: 'center' }}>
           <button onClick={handleRerollSlime}><FaDice /> Reroll Slime</button>
           <button onClick={handleRerollBody}><FaDice /> Reroll Host Body</button>
