@@ -153,28 +153,72 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
     return (
         <>
             <section className='card left-col'>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                    <h2 className='slime-name'>
+                        <strong>{traits.name.toUpperCase()}</strong>
+                    </h2><RerollButton onClick={() => setTraits({ ...traits, name: generateSlimeName() })} style={{ fontSize: '1.5rem' }} />
+                </div>
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', alignItems: 'flex-start', marginTop: '-1rem' }}>
+                    <RerollButton onClick={() => setTraits({ ...traits, title: slimeTitles[rollD6()] })} style={{ fontSize: '1.5rem' }} />
+                    <h2 className='slime-title'>
+                        the {traits.title.name.toUpperCase()}
+                    </h2>
+                </div>
+                <div className='description'>
+                    <p>{traits.title.description}</p>
+                </div>
 
-                <h2><strong>{traits.name}</strong>, <RerollButton onClick={() => setTraits({ ...traits, name: generateSlimeName() })} />
-                    <br />the {traits.title.name} <RerollButton onClick={() => setTraits({ ...traits, title: slimeTitles[rollD6()] })} />
-                </h2>
-                <p>{traits.title.description}</p>
-                <h3>Appearance <RerollButton onClick={() => regenerateSlime({ color: true, pattern: true, accent: true, texture: true })} /></h3>
-                <p>{capitalize(getArticle(traits.color[0]))} <strong>{traits.color}</strong><RerollButton onClick={() => setTraits({ ...traits, color: slimeColor[rollD6()] })} />
-                    slime, patterned with <strong>{traits.accent}</strong><RerollButton onClick={() => setTraits({ ...traits, accent: slimeAccent[rollD6()] })} />,
-                    <strong> {traits.pattern}</strong><RerollButton onClick={() => setTraits({ ...traits, pattern: slimePattern[rollD6()] })} />
-                    accents, with {getArticle(traits.texture[0])} <strong>{traits.texture}</strong><RerollButton onClick={() => setTraits({ ...traits, texture: slimeTexture[rollD6()] })} />
-                    surface.</p>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', marginBottom: '0.5rem', marginTop: '0.5rem' }}>
+                    <h2 style={{ color: '#bed62a' }}>Appearance </h2>
+                    <RerollButton onClick={() => regenerateSlime({ color: true, pattern: true, accent: true, texture: true })} style={{ fontSize: '1.2rem' }} />
+                </div>
+                <div className='description'>
+                    <p>{capitalize(getArticle(traits.color[0]))}{' '}
+                        <span className='no-wrap'>
+                            <strong className='highlight'>{traits.color}</strong>
+                            <RerollButton onClick={() => setTraits({ ...traits, color: slimeColor[rollD6()] })} />
+                        </span>
+                        {' '}slime, patterned with{' '}
+                        <span className='no-wrap'>
+                            <strong className='highlight'>{traits.accent}</strong>
+                            <RerollButton onClick={() => setTraits({ ...traits, accent: slimeAccent[rollD6()] })} />
+                        </span>
+                        ,{' '}
+                        <span className='no-wrap'>
+                            <strong className='highlight'>{traits.pattern}</strong>
+                            <RerollButton onClick={() => setTraits({ ...traits, pattern: slimePattern[rollD6()] })} />
+                        </span>
+                        {' '}accents, with {getArticle(traits.texture[0])}{' '}
+                        <span className='no-wrap'>
+                            <strong className='highlight'>{traits.texture}</strong>
+                            <RerollButton onClick={() => setTraits({ ...traits, texture: slimeTexture[rollD6()] })} />
+                        </span>
+                        {' '}surface.</p>
+                </div>
             </section>
             <section className='card right-col'>
-                <h2>Skills <RerollButton onClick={() => regenerateSkills('skills')} /></h2>
-                <ul>
-                    {skills.length === 0 ? <p>None</p> : skills.map(s => <li key={s.name}>{s.name}</li>)}
-                </ul>
-                <h2>Weaknesses <RerollButton onClick={() => regenerateSkills('weaknesses')} /></h2>
-
-                <ul>
-                    {weaknesses.map(s => <li key={s.name}>{s.name}</li>)}
-                </ul>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+                    <h2 className='card-header'>Skills </h2> <RerollButton onClick={() => regenerateSkills('skills')} style={{ fontSize: '1.2rem' }} />
+                </div>
+                {skills.length === 0 ? <div className='item'><strong>None</strong></div> : skills.map((s, index) => (
+                    <div key={s.name}>
+                        <div className='item'><strong>{s.name}</strong></div>
+                        {index < skills.length - 1 && (
+                            <div className="dot-border" />
+                        )}
+                    </div>
+                ))}
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+                    <h2 className='card-header'>Weaknesses </h2><RerollButton onClick={() => regenerateSkills('weaknesses')} style={{ fontSize: '1.2rem' }} />
+                </div>
+                {weaknesses.map((s, index) => (
+                    <div key={s.name}>
+                        <div className='item'><strong>{s.name}</strong></div>
+                        {index < weaknesses.length - 1 && (
+                            <div className="dot-border" />
+                        )}
+                    </div>
+                ))}
 
             </section >
         </>

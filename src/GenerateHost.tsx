@@ -10,6 +10,7 @@ import {
     hostMouth,
     hostNose
 } from './data/hostTraits'
+import { RerollButton } from './utils/RerollButton';
 import { getArticle, capitalize } from './utils/textUtilities';
 
 export interface HostHandle {
@@ -71,15 +72,24 @@ export const GenerateHost = forwardRef<HostHandle, {}>((_props, ref) => {
     return (
         <>
             <section className='card left-col'>
-                <h2>Host body</h2>
-                <p>Your host body is {getArticle(body.occupation)} <strong>{body.occupation}</strong>.</p>
-                <p>{description}</p>
+                <h2 className='card-header'>Host body</h2>
+                <div className='description'>
+                    <p>Your host body is {getArticle(body.occupation)} <strong className='highlight'>{body.occupation}</strong> <RerollButton onClick={() => setBody(hostBodies[rollDice('1d36')])} />.</p>
+                    <p>{description}</p>
+                </div>
             </section>
             <section className='card right-col'>
-                <h2>Belongings</h2>
-                <ul>
-                    {body.belongings.map((s, index) => <li key={index}>{capitalize(s)}</li>)}
-                </ul>
+                <h2 className='card-header'>Belongings</h2>
+                {body.belongings.map((s, index) => (
+                    <div key={s}>
+                        <div className='item'><strong>{capitalize(s)}</strong></div>
+                        {index < body.belongings.length - 1 && (
+                            <div className="dot-border" />
+                        )}
+                    </div>
+                )
+                )}
+
             </section>
         </>
     );

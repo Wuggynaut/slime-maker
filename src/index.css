@@ -1,9 +1,8 @@
 :root {
   font-family: 'Gentium Book Basic', serif;
   line-height: 1.5;
-  font-weight: 400;
 
-  color-scheme: light dark;
+  color-scheme: dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #181818;
 
@@ -11,6 +10,11 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --color-dark-green: #0c9947;
+  --color-green: #bed62a;
+  --color-yellow: #f2dd1a;
+  --color-light: #efddc3;
 }
 
 * {
@@ -28,8 +32,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2px;
-  background: #7e7e7e;
-  border: solid 2px #7e7e7e;
+  background: var(--color-green);
+  border: solid 6px var(--color-light);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 .left-col {
@@ -44,6 +50,22 @@
 
 .card {
   background-color: #242424;
+}
+
+.card:first-child {
+  border-top-left-radius: 6px;
+}
+
+.card:nth-child(2) {
+  border-top-right-radius: 6px;
+}
+
+.card:nth-last-child(2) {
+  border-bottom-left-radius: 6px;
+}
+
+.card:last-child {
+  border-bottom-right-radius: 6px;
 }
 
 .card-content {
@@ -73,6 +95,9 @@ h4,
 h5,
 h6 {
   font-family: 'Oswald', sans-serif;
+  transform: scaleY(1.15);
+  margin: 0;
+  padding: 0;
 }
 
 @font-face {
@@ -85,16 +110,39 @@ h6 {
 .header-title {
   font-family: 'KreepTown', sans-serif;
   font-size: 3rem;
-  color: #0c9947;
+  color: var(--color-dark-green);
   text-shadow:
-    -2px -2px 0 #f2dd1a,
-    2px -2px 0 #f2dd1a,
-    -2px 2px 0 #f2dd1a,
-    4px 4px 0 #f2dd1a,
-    -2px 0 0 #f2dd1a,
-    4px 0 0 #f2dd1a,
-    0 -2px 0 #f2dd1a,
-    0 4px 0 #f2dd1a;
+    -2px -2px 0 var(--color-yellow),
+    2px -2px 0 var(--color-yellow),
+    -2px 2px 0 var(--color-yellow),
+    4px 4px 0 var(--color-yellow),
+    -2px 0 0 var(--color-yellow),
+    4px 0 0 var(--color-yellow),
+    0 -2px 0 var(--color-yellow),
+    0 4px 0 var(--color-yellow);
+}
+
+.slime-name {
+  color: var(--color-yellow);
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 2.4rem;
+}
+
+.slime-title {
+  color: var(--color-green);
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: 2rem;
+}
+
+.description {
+  font-size: 1.05rem;
+  color: var(--color-yellow);
+}
+
+.white {
+  color: var(--color-light);
 }
 
 button {
@@ -114,13 +162,39 @@ strong {
   font-family: 'Oswald', sans-serif;
 }
 
+.no-wrap {
+  white-space: nowrap;
+}
+
+.highlight {
+  color: var(--color-green);
+}
+
+.card-header {
+  color: var(--color-yellow);
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
 ul,
 ol {
   padding-left: 1em;
   margin-left: 0;
 }
 
+.item {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  text-align: center;
+  color: var(--color-light);
+}
+
+.dot-border {
+  border-bottom: 2px dotted var(--color-yellow);
+}
+
 .icon-button {
+  color: var(--color-light);
   background: none;
   border: none;
   cursor: pointer;
@@ -135,20 +209,13 @@ button:focus-visible {
 
 @media (hover: hover) and (pointer: fine) {
   .icon-button:hover {
-    color: #4e4e4e;
+    color: var(--color-dark-green);
     border-radius: 4px;
   }
 
   button:hover {
-    border-color: #4e4e4e;
-    color: #4e4e4e;
-  }
-}
-
-@media (hover: none) {
-  .icon-button:hover {
-    color: #4e4e4e;
-    border-radius: 4px;
+    border-color: var(--color-dark-green);
+    color: var(--color-dark-green);
   }
 }
 
@@ -169,24 +236,5 @@ button:focus-visible {
   .left-col,
   .right-col {
     grid-column: 1;
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #c4c4c4;
-  }
-
-  .card {
-    background-color: #ffffff;
-  }
-
-  a:hover {
-    color: #ffa074;
-  }
-
-  button {
-    background-color: #f9f9f9;
   }
 }
