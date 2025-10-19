@@ -72,24 +72,27 @@ export const GenerateHost = forwardRef<HostHandle, {}>((_props, ref) => {
     return (
         <>
             <section className='card left-col'>
-                <h2 className='card-header'>Host body</h2>
-                <div className='description'>
-                    <p>Your host body is {getArticle(body.occupation)} <strong className='highlight'>{body.occupation}</strong> <RerollButton onClick={() => setBody(hostBodies[rollDice('1d36')])} />.</p>
-                    <p>{description}</p>
+                <div className='card-content'>
+                    <h2 className='card-header'>Host body</h2>
+                    <div className='description'>
+                        <p>Your host body is {getArticle(body.occupation)} <strong className='highlight'>{body.occupation}</strong> <RerollButton onClick={() => setBody(hostBodies[rollDice('1d36')])} />.</p>
+                        <p>{description}</p>
+                    </div>
                 </div>
             </section>
             <section className='card right-col'>
-                <h2 className='card-header'>Belongings</h2>
-                {body.belongings.map((s, index) => (
-                    <div key={s}>
-                        <div className='item'><strong>{capitalize(s)}</strong></div>
-                        {index < body.belongings.length - 1 && (
-                            <div className="dot-border" />
-                        )}
-                    </div>
-                )
-                )}
-
+                <div className='card-content'>
+                    <h2 className='card-header'>Belongings</h2>
+                    {body.belongings.map((s, index) => (
+                        <div key={s}>
+                            <div className='item'><strong>{capitalize(s)}</strong></div>
+                            {index < body.belongings.length - 1 && (
+                                <div className="dot-border" />
+                            )}
+                        </div>
+                    )
+                    )}
+                </div>
             </section>
         </>
     );

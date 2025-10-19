@@ -14,7 +14,18 @@
   --color-dark-green: #0c9947;
   --color-green: #bed62a;
   --color-yellow: #f2dd1a;
-  --color-light: #efddc3;
+  --color-light: #e4d299;
+}
+
+.grainy-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background-color: #252525;
+  filter: url(#grainy);
 }
 
 * {
@@ -23,19 +34,28 @@
   box-sizing: border-box;
 }
 
+.grainy-svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
 .slime-sheet {
   max-width: 900px;
   padding: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .content-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2px;
-  background: var(--color-green);
+  background: var(--color-light);
   border: solid 6px var(--color-light);
   border-radius: 8px;
   overflow: hidden;
+
 }
 
 .left-col {
@@ -49,7 +69,23 @@
 }
 
 .card {
-  background-color: #242424;
+  background-color: #2a3c4b;
+  position: relative;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2a3c4b;
+  filter: url(#grainy);
+  z-index: 0;
+  /* Puts it behind the text */
+  border-radius: inherit;
+  /* Matches the card's border radius */
 }
 
 .card:first-child {
@@ -69,7 +105,8 @@
 }
 
 .card-content {
-  padding: 15px;
+  position: relative;
+  z-index: 1;
 }
 
 a {
@@ -147,14 +184,14 @@ h6 {
 
 button {
   border-radius: 8px;
-  border: 1px solid;
+  border: 1px solid var(--color-yellow);
+  color: var(--color-green);
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: 'Oswald', sans-serif;
-  background-color: #1a1a1a;
+  background-color: #242424;
   cursor: pointer;
-  transition: border-color 0.25s;
   touch-action: manipulation;
 }
 
@@ -186,11 +223,11 @@ ol {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   text-align: center;
-  color: var(--color-light);
+  color: var(--color-green);
 }
 
 .dot-border {
-  border-bottom: 2px dotted var(--color-yellow);
+  border-bottom: 2px dotted var(--color-light);
 }
 
 .icon-button {
