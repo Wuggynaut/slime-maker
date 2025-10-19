@@ -69,7 +69,7 @@ Alien Brain Slimes is my sci-fi comedy tabletop RPG. Check it out on [itch.io](h
 
 This project is for portfolio purposes.
 
-## 👤 Contact
+## Contact
 
 Ari-Matti Toivonen
 arimatti.toivonen@gmail.com
