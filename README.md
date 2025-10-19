@@ -59,6 +59,7 @@ npm run build
 
 - Add character export/save functionality
 - Add print-friendly character sheet view
+- GM Tools (Mission generator, malfunction prompts etc.)
 - More unnecessary visual effects
 
 ## About Alien Brain Slimes
