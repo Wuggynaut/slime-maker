@@ -55,7 +55,6 @@
   border: solid 6px var(--color-light);
   border-radius: 8px;
   overflow: hidden;
-
 }
 
 .left-col {
@@ -107,6 +106,34 @@
 .card-content {
   position: relative;
   z-index: 1;
+  min-height: 100%;
+}
+
+.corner {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  pointer-events: none;
+}
+
+.top-left {
+  top: -25px;
+  left: -25px;
+}
+
+.top-right {
+  top: -25px;
+  right: -25px;
+}
+
+.bottom-left {
+  bottom: -25px;
+  left: -25px;
+}
+
+.bottom-right {
+  bottom: -25px;
+  right: -25px;
 }
 
 a {
@@ -293,5 +320,9 @@ button:focus-visible {
   .left-col,
   .right-col {
     grid-column: 1;
+  }
+
+  .corner {
+    display: none;
   }
 }

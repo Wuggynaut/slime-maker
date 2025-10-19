@@ -28,7 +28,9 @@ function App() {
           </filter>
         </defs>
       </svg>
+
       <div className='grainy-background' />
+
       <div className='slime-sheet'>
         <div style={{ textAlign: 'center' }}>
           <h1 className='header-title'>THE SLIME MAKER</h1>

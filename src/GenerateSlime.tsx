@@ -11,6 +11,8 @@ import {
 import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { getArticle, capitalize } from './utils/textUtilities';
 import { RerollButton } from './utils/RerollButton';
+import cornerdistress1 from './assets/corner_effects/Cornerdistress1.png'
+import cornerdistress2 from './assets/corner_effects/Cornerdistress2.png'
 
 export interface SlimeHandle {
     regenerateSlime: (traitsToRegenerate?: {
@@ -154,16 +156,23 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
         <>
             <section className='card left-col'>
                 <div className='card-content'>
-                    <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-                        <h2 className='slime-name'>
-                            <strong>{traits.name.toUpperCase()}</strong>
-                        </h2><RerollButton onClick={() => setTraits({ ...traits, name: generateSlimeName() })} style={{ fontSize: '1.5rem' }} />
-                    </div>
-                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', alignItems: 'flex-start', marginTop: '-1rem' }}>
-                        <RerollButton onClick={() => setTraits({ ...traits, title: slimeTitles[rollD6()] })} style={{ fontSize: '1.5rem' }} />
-                        <h2 className='slime-title'>
-                            the {traits.title.name.toUpperCase()}
-                        </h2>
+                    <img
+                        src={cornerdistress1}
+                        alt=""
+                        className="corner top-left"
+                    />
+                    <div style={{ maxWidth: '400px', margin: '0 auto' }}>
+                        <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                            <h2 className='slime-name'>
+                                <strong>{traits.name.toUpperCase()}</strong>
+                            </h2><RerollButton onClick={() => setTraits({ ...traits, name: generateSlimeName() })} style={{ fontSize: '1.5rem' }} />
+                        </div>
+                        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', alignItems: 'flex-start', marginTop: '-1rem' }}>
+                            <RerollButton onClick={() => setTraits({ ...traits, title: slimeTitles[rollD6()] })} style={{ fontSize: '1.5rem' }} />
+                            <h2 className='slime-title'>
+                                the {traits.title.name.toUpperCase()}
+                            </h2>
+                        </div>
                     </div>
                     <div className='description'>
                         <p>{traits.title.description}</p>
@@ -201,6 +210,11 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
             </section>
             <section className='card right-col'>
                 <div className='card-content'>
+                    <img
+                        src={cornerdistress2}
+                        alt=""
+                        className="corner top-right"
+                    />
                     <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
                         <div style={{ width: '1.2rem' }} />
                         <h2 className='card-header'>Skills </h2>

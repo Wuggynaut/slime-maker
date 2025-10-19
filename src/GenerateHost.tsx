@@ -12,6 +12,8 @@ import {
 } from './data/hostTraits'
 import { RerollButton } from './utils/RerollButton';
 import { getArticle, capitalize } from './utils/textUtilities';
+import cornerdistress3 from './assets/corner_effects/Cornerdistress3.png'
+import cornerdistress4 from './assets/corner_effects/Cornerdistress4.png'
 
 export interface HostHandle {
     generateBody: () => void;
@@ -72,7 +74,13 @@ export const GenerateHost = forwardRef<HostHandle, {}>((_props, ref) => {
     return (
         <>
             <section className='card left-col'>
+
                 <div className='card-content'>
+                    <img
+                        src={cornerdistress3}
+                        alt=""
+                        className="corner bottom-left"
+                    />
                     <h2 className='card-header'>Host body</h2>
                     <div className='description'>
                         <p>Your host body is {getArticle(body.occupation)} <strong className='highlight'>{body.occupation}</strong> <RerollButton onClick={() => setBody(hostBodies[rollDice('1d36')])} />.</p>
@@ -82,6 +90,11 @@ export const GenerateHost = forwardRef<HostHandle, {}>((_props, ref) => {
             </section>
             <section className='card right-col'>
                 <div className='card-content'>
+                    <img
+                        src={cornerdistress4}
+                        alt=""
+                        className="corner bottom-right"
+                    />
                     <h2 className='card-header'>Belongings</h2>
                     {body.belongings.map((s, index) => (
                         <div key={s}>
