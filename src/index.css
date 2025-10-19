@@ -227,6 +227,26 @@ button:focus-visible {
   }
 
   .content-grid {
+    border-radius: 0;
+  }
+
+  .card:first-child {
+    border-top-left-radius: 0;
+  }
+
+  .card:nth-child(2) {
+    border-top-right-radius: 0;
+  }
+
+  .card:nth-last-child(2) {
+    border-bottom-left-radius: 0;
+  }
+
+  .card:last-child {
+    border-bottom-right-radius: 0;
+  }
+
+  .content-grid {
     grid-template-columns: 1fr;
     border-left: none;
     border-right: none;

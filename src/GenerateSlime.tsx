@@ -169,6 +169,7 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', marginBottom: '0.5rem', marginTop: '0.5rem' }}>
+                    <div style={{ width: '1.2rem' }} />
                     <h2 style={{ color: '#bed62a' }}>Appearance </h2>
                     <RerollButton onClick={() => regenerateSlime({ color: true, pattern: true, accent: true, texture: true })} style={{ fontSize: '1.2rem' }} />
                 </div>
@@ -198,7 +199,9 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
             </section>
             <section className='card right-col'>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-                    <h2 className='card-header'>Skills </h2> <RerollButton onClick={() => regenerateSkills('skills')} style={{ fontSize: '1.2rem' }} />
+                    <div style={{ width: '1.2rem' }} />
+                    <h2 className='card-header'>Skills </h2>
+                    <RerollButton onClick={() => regenerateSkills('skills')} style={{ fontSize: '1.2rem' }} />
                 </div>
                 {skills.length === 0 ? <div className='item'><strong>None</strong></div> : skills.map((s, index) => (
                     <div key={s.name}>
@@ -209,7 +212,9 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
                     </div>
                 ))}
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
-                    <h2 className='card-header'>Weaknesses </h2><RerollButton onClick={() => regenerateSkills('weaknesses')} style={{ fontSize: '1.2rem' }} />
+                    <div style={{ width: '1.2rem' }} />
+                    <h2 className='card-header'>Weaknesses </h2>
+                    <RerollButton onClick={() => regenerateSkills('weaknesses')} style={{ fontSize: '1.2rem' }} />
                 </div>
                 {weaknesses.map((s, index) => (
                     <div key={s.name}>
