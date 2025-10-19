@@ -40,6 +40,10 @@
   height: 0;
 }
 
+.logo {
+  width: 25%;
+}
+
 .slime-sheet {
   max-width: 900px;
   padding: 20px;
@@ -173,7 +177,7 @@ h6 {
 
 .header-title {
   font-family: 'KreepTown', sans-serif;
-  font-size: 3rem;
+  font-size: 4rem;
   color: var(--color-dark-green);
   text-shadow:
     -2px -2px 0 var(--color-yellow),
@@ -185,6 +189,8 @@ h6 {
     0 -2px 0 var(--color-yellow),
     0 4px 0 var(--color-yellow);
 }
+
+
 
 .slime-name {
   color: var(--color-yellow);
@@ -222,6 +228,15 @@ button {
   touch-action: manipulation;
 }
 
+.button-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
 strong {
   font-family: 'Oswald', sans-serif;
 }
@@ -238,6 +253,23 @@ strong {
   color: var(--color-yellow);
   text-align: center;
   margin-bottom: 1rem;
+}
+
+.card-header-group {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.slime-header {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.title {
+  justify-content: flex-end;
+  margin-top: -1rem;
 }
 
 ul,

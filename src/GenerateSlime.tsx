@@ -1,6 +1,6 @@
 import { slimeTitles } from './data/slimeTitles';
 import { slimeAccent, slimeColor, slimePattern, slimeTexture } from './data/slimeTraits';
-import { rollD6, rollDice } from './utils/diceRoller';
+import { rollDice } from './utils/diceRoller';
 import { generateSlimeName } from './utils/slimeNameGenerator';
 import {
     physicalSkills,
@@ -8,9 +8,10 @@ import {
     knowledgeSkills,
     type Skill
 } from './data/slimeSkills';
-import { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import { useEffect, useState, forwardRef, useImperativeHandle, useCallback } from 'react';
 import { getArticle, capitalize } from './utils/textUtilities';
 import { RerollButton } from './utils/RerollButton';
+import { DICE, GENERATION } from './constants/gameConfig';
 import cornerdistress1 from './assets/corner_effects/Cornerdistress1.png'
 import cornerdistress2 from './assets/corner_effects/Cornerdistress2.png'
 
@@ -28,11 +29,11 @@ export interface SlimeHandle {
 export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
     const [traits, setTraits] = useState(() => ({
         name: generateSlimeName(),
-        color: slimeColor[rollD6()],
-        pattern: slimePattern[rollD6()],
-        accent: slimeAccent[rollD6()],
-        texture: slimeTexture[rollD6()],
-        title: slimeTitles[rollD6()]
+        color: slimeColor[rollDice(DICE.SLIME_TRAIT)],
+        pattern: slimePattern[rollDice(DICE.SLIME_TRAIT)],
+        accent: slimeAccent[rollDice(DICE.SLIME_TRAIT)],
+        texture: slimeTexture[rollDice(DICE.SLIME_TRAIT)],
+        title: slimeTitles[rollDice(DICE.SLIME_TRAIT)]
     }));
 
     const [skills, setSkills] = useState<Skill[]>([]);
@@ -50,11 +51,11 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
 
         setTraits(prevTraits => ({
             name: (regenAll || traitsToRegenerate?.name) ? generateSlimeName() : prevTraits.name,
-            color: (regenAll || traitsToRegenerate?.color) ? slimeColor[rollD6()] : prevTraits.color,
-            pattern: (regenAll || traitsToRegenerate?.pattern) ? slimePattern[rollD6()] : prevTraits.pattern,
-            accent: (regenAll || traitsToRegenerate?.accent) ? slimeAccent[rollD6()] : prevTraits.accent,
-            texture: (regenAll || traitsToRegenerate?.texture) ? slimeTexture[rollD6()] : prevTraits.texture,
-            title: (regenAll || traitsToRegenerate?.title) ? slimeTitles[rollD6()] : prevTraits.title
+            color: (regenAll || traitsToRegenerate?.color) ? slimeColor[rollDice(DICE.SLIME_TRAIT)] : prevTraits.color,
+            pattern: (regenAll || traitsToRegenerate?.pattern) ? slimePattern[rollDice(DICE.SLIME_TRAIT)] : prevTraits.pattern,
+            accent: (regenAll || traitsToRegenerate?.accent) ? slimeAccent[rollDice(DICE.SLIME_TRAIT)] : prevTraits.accent,
+            texture: (regenAll || traitsToRegenerate?.texture) ? slimeTexture[rollDice(DICE.SLIME_TRAIT)] : prevTraits.texture,
+            title: (regenAll || traitsToRegenerate?.title) ? slimeTitles[rollDice(DICE.SLIME_TRAIT)] : prevTraits.title
         }));
     };
 
@@ -62,8 +63,12 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
         regenerateSlime
     }));
 
+    /**
+     * Randomly selects one of the three skill categories for skill generation
+     * @returns One of: physicalSkills, socialSkills, or knowledgeSkills
+     */
     const randomCategory = (): Record<number, Skill> => {
-        let randomCategory = rollDice('1d3');
+        let randomCategory = rollDice(DICE.RANDOM_CATEGORY);
         if (randomCategory === 1) {
             return physicalSkills;
         } else if (randomCategory === 2) {
@@ -73,34 +78,55 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
         }
     }
 
-    const regenerateSkills = (mode: 'skills' | 'weaknesses' | 'all') => {
+    /**
+     * Generates skills and/or weaknesses based on the slime's title
+     * @param mode - 'skills': regenerate only skills, 'weaknesses': regenerate only weaknesses, 'all': regenerate both
+     * 
+     * Each slime title has unique skill generation rules:
+     * - Sabotage/Infiltration/Science: 2 from their specialty + 1 random
+     * - Surveillance: Always gets "Eye Control" + 2 random
+     * - Embryonic: 1 from each category
+     * - Prince: No skills (intentionally empty)
+     */
+    const regenerateSkills = useCallback((mode: 'skills' | 'weaknesses' | 'all') => {
         const newSkills: Skill[] = [];
         const newWeaknesses: Skill[] = [];
+        // Track used skills to prevent duplicates between skills and weaknesses
         const usedSkills: Skill[] = [];
 
+        // When regenerating only skills, preserve existing weaknesses (and vice versa)
         if (mode === 'skills') {
             weaknesses.forEach(s => usedSkills.push(s));
         } else if (mode === 'weaknesses') {
             skills.forEach(s => usedSkills.push(s));
         }
 
+        /**
+         * Generates a unique skill from a category, avoiding duplicates
+         * Uses collision detection with a max retry limit to prevent infinite loops
+         */
         const uniqueSkill = (category: Record<number, Skill>): Skill => {
             let skill: Skill;
             let attempts = 0;
             do {
-                skill = category[rollD6()];
+                skill = category[rollDice(DICE.SLIME_TRAIT)];
                 attempts++;
-            } while (usedSkills.includes(skill) && attempts < 50);
+            } while (usedSkills.includes(skill) && attempts < GENERATION.MAX_UNIQUE_SKILL_ATTEMPTS);
             usedSkills.push(skill);
             return skill;
         };
 
+        /**
+         * Helper: Generates 2 skills from a specific category plus 1 random skill
+         * Used by specialist slimes (Sabotage, Infiltration, Science)
+         */
         const twoFromCategoryPlusRandom = (category: Record<number, Skill>) => {
             newSkills.push(uniqueSkill(category));
             newSkills.push(uniqueSkill(category));
             newSkills.push(uniqueSkill(randomCategory()));
         };
 
+        // Weaknesses are always 3 random skills from any category
         const threeRandomWeaknesses = () => {
             newWeaknesses.push(uniqueSkill(randomCategory()));
             newWeaknesses.push(uniqueSkill(randomCategory()));
@@ -108,6 +134,7 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
         }
 
         if (mode === 'skills' || mode === 'all') {
+            // Generate skills based on slime title's specialization
             switch (traits.title.name) {
                 case 'Sabotage Slime':
                     twoFromCategoryPlusRandom(physicalSkills);
@@ -119,17 +146,20 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
                     twoFromCategoryPlusRandom(knowledgeSkills);
                     break;
                 case 'Surveillance Slime':
-                    newSkills.push(physicalSkills[4]);
-                    usedSkills.push(physicalSkills[4]);
+                    // Always gets 'Eye Control' as their signature skill
+                    newSkills.push(physicalSkills[GENERATION.SURVEILLANCE_SLIME_FIXED_SKILL_INDEX]);
+                    usedSkills.push(physicalSkills[GENERATION.SURVEILLANCE_SLIME_FIXED_SKILL_INDEX]);
                     newSkills.push(uniqueSkill(randomCategory()));
                     newSkills.push(uniqueSkill(randomCategory()));
                     break;
                 case 'Embryonic Slime':
+                    // One skill from each category
                     newSkills.push(uniqueSkill(physicalSkills));
                     newSkills.push(uniqueSkill(socialSkills));
                     newSkills.push(uniqueSkill(knowledgeSkills));
                     break;
                 case 'Prince Slime':
+                    // Intentionally gains no skills
                     break;
             }
         }
@@ -138,6 +168,7 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
             threeRandomWeaknesses();
         }
 
+        // Update state based on what was regenerated
         if (mode === 'all') {
             setSkills(newSkills);
             setWeaknesses(newWeaknesses);
@@ -146,7 +177,7 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
         } else if (mode === 'weaknesses') {
             setWeaknesses(newWeaknesses);
         }
-    }
+    }, [skills, weaknesses, traits.title.name]);
 
     useEffect(() => {
         regenerateSkills('all');
@@ -159,16 +190,17 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
                     <img
                         src={cornerdistress1}
                         alt=""
+                        aria-hidden="true"
                         className="corner top-left"
                     />
                     <div style={{ maxWidth: '400px', margin: '0 auto' }}>
-                        <div style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                        <div className='slime-header'>
                             <h2 className='slime-name'>
                                 <strong>{traits.name.toUpperCase()}</strong>
                             </h2><RerollButton onClick={() => setTraits({ ...traits, name: generateSlimeName() })} style={{ fontSize: '1.5rem' }} />
                         </div>
-                        <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end', alignItems: 'flex-start', marginTop: '-1rem' }}>
-                            <RerollButton onClick={() => setTraits({ ...traits, title: slimeTitles[rollD6()] })} style={{ fontSize: '1.5rem' }} />
+                        <div className='slime-header title'>
+                            <RerollButton onClick={() => setTraits({ ...traits, title: slimeTitles[rollDice(DICE.SLIME_TRAIT)] })} style={{ fontSize: '1.5rem' }} />
                             <h2 className='slime-title'>
                                 the {traits.title.name.toUpperCase()}
                             </h2>
@@ -178,7 +210,7 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
                         <p>{traits.title.description}</p>
                     </div>
 
-                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center', marginBottom: '0.5rem', marginTop: '0.5rem' }}>
+                    <div className='card-header-group' style={{ marginBottom: '0.5rem', marginTop: '0.5rem' }}>
                         <div style={{ width: '1.2rem' }} />
                         <h2 style={{ color: '#bed62a' }}>Appearance </h2>
                         <RerollButton onClick={() => regenerateSlime({ color: true, pattern: true, accent: true, texture: true })} style={{ fontSize: '1.2rem' }} />
@@ -187,22 +219,22 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
                         <p>{capitalize(getArticle(traits.color[0]))}{' '}
                             <span className='no-wrap'>
                                 <strong className='highlight'>{traits.color}</strong>
-                                <RerollButton onClick={() => setTraits({ ...traits, color: slimeColor[rollD6()] })} />
+                                <RerollButton onClick={() => setTraits({ ...traits, color: slimeColor[rollDice(DICE.SLIME_TRAIT)] })} />
                             </span>
                             {' '}slime, patterned with{' '}
                             <span className='no-wrap'>
                                 <strong className='highlight'>{traits.accent}</strong>
-                                <RerollButton onClick={() => setTraits({ ...traits, accent: slimeAccent[rollD6()] })} />
+                                <RerollButton onClick={() => setTraits({ ...traits, accent: slimeAccent[rollDice(DICE.SLIME_TRAIT)] })} />
                             </span>
                             ,{' '}
                             <span className='no-wrap'>
                                 <strong className='highlight'>{traits.pattern}</strong>
-                                <RerollButton onClick={() => setTraits({ ...traits, pattern: slimePattern[rollD6()] })} />
+                                <RerollButton onClick={() => setTraits({ ...traits, pattern: slimePattern[rollDice(DICE.SLIME_TRAIT)] })} />
                             </span>
                             {' '}accents, with {getArticle(traits.texture[0])}{' '}
                             <span className='no-wrap'>
                                 <strong className='highlight'>{traits.texture}</strong>
-                                <RerollButton onClick={() => setTraits({ ...traits, texture: slimeTexture[rollD6()] })} />
+                                <RerollButton onClick={() => setTraits({ ...traits, texture: slimeTexture[rollDice(DICE.SLIME_TRAIT)] })} />
                             </span>
                             {' '}surface.</p>
                     </div>
@@ -213,9 +245,10 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
                     <img
                         src={cornerdistress2}
                         alt=""
+                        aria-hidden="true"
                         className="corner top-right"
                     />
-                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+                    <div className='card-header-group'>
                         <div style={{ width: '1.2rem' }} />
                         <h2 className='card-header'>Skills </h2>
                         <RerollButton onClick={() => regenerateSkills('skills')} style={{ fontSize: '1.2rem' }} />
@@ -228,7 +261,7 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
                             )}
                         </div>
                     ))}
-                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'center' }}>
+                    <div className='card-header-group'>
                         <div style={{ width: '1.2rem' }} />
                         <h2 className='card-header'>Weaknesses </h2>
                         <RerollButton onClick={() => regenerateSkills('weaknesses')} style={{ fontSize: '1.2rem' }} />

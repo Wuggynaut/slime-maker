@@ -4,6 +4,7 @@ import { GenerateHost, type HostHandle } from './GenerateHost'
 import { GenerateSlime, type SlimeHandle } from './GenerateSlime';
 import { useRef } from 'react';
 import { FaDice } from "react-icons/fa";
+import logo from './assets/logo.png'
 
 function App() {
   const slimeRef = useRef<SlimeHandle>(null);
@@ -34,9 +35,17 @@ function App() {
       <div className='slime-sheet'>
         <div style={{ textAlign: 'center' }}>
           <h1 className='header-title'>THE SLIME MAKER</h1>
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '10px', marginBottom: '20px', justifyContent: 'center' }}>
-            <button onClick={handleRerollSlime}><FaDice /> Reroll Slime</button>
-            <button onClick={handleRerollBody}><FaDice /> Reroll Host Body</button>
+          <div className='description'><strong>A character generator for</strong></div>
+          <a href='https://wuggy.itch.io/alien-brain-slimes'>
+            <img
+              src={logo}
+              alt="Alien Brain Slimes logo"
+              className="logo"
+            />
+          </a>
+          <div className='button-group'>
+            <button onClick={handleRerollSlime} aria-label='Reroll slime'><FaDice /> Reroll Slime</button>
+            <button onClick={handleRerollBody} aria-label='Reroll host body'><FaDice /> Reroll Host Body</button>
           </div>
         </div>
 
