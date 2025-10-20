@@ -26,6 +26,20 @@ export interface SlimeHandle {
     }) => void;
 }
 
+interface GenereteSlimeProps {
+    traits: {
+        name: string;
+        color: string;
+        pattern: string;
+        accent: string;
+        texture: string;
+        title: { name: string; description: string }
+    }
+    skills: Skill[];
+    weaknesses: Skill[];
+    
+}
+
 export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
     const [traits, setTraits] = useState(() => ({
         name: generateSlimeName(),
