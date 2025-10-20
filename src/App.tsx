@@ -41,8 +41,12 @@ function App() {
     selectedFacePart: rollDice(DICE.FACE_FEATURE) as 1 | 2 | 3
   }));
 
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle');
+  const [copyCount, setCopyCount] = useState(0);
+
   const slimeRef = useRef<SlimeHandle>(null);
   const bodyRef = useRef<HostHandle>(null);
+  const copyTimeoutRef = useRef<number | null>(null);
 
   const handleRerollSlime = () => {
     slimeRef.current?.regenerateSlime();
@@ -53,21 +57,36 @@ function App() {
   };
 
   const handleCopyCharacter = async () => {
-    const text = formatCharacterForClipboard(
-      slimeTraits.name,
-      slimeTraits.title.name,
-      slimeTraits.title.description,
-      slimeTraits.color,
-      slimeTraits.accent,
-      slimeTraits.pattern,
-      slimeTraits.texture,
-      slimeSkills,
-      slimeWeaknesses,
-      hostBody.occupation,
-      generateHostDescription(hostTraits),
-      hostBody.belongings
-    );
-    await navigator.clipboard.writeText(text);
+    try {
+
+      if (copyTimeoutRef.current !== null) {
+        clearTimeout(copyTimeoutRef.current);
+      }
+
+      const text = formatCharacterForClipboard(
+        slimeTraits.name,
+        slimeTraits.title.name,
+        slimeTraits.title.description,
+        slimeTraits.color,
+        slimeTraits.accent,
+        slimeTraits.pattern,
+        slimeTraits.texture,
+        slimeSkills,
+        slimeWeaknesses,
+        hostBody.occupation,
+        generateHostDescription(hostTraits),
+        hostBody.belongings
+      );
+      await navigator.clipboard.writeText(text);
+      setCopyStatus('copied');
+      setCopyCount(prev => prev + 1); //Increment copy counter to force React to remount element
+
+      setTimeout(() => setCopyStatus('idle'), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+      setCopyStatus('error');
+      setTimeout(() => setCopyStatus('idle'), 2000);
+    }
   }
 
   return (
@@ -121,7 +140,12 @@ function App() {
 
 
         </div>
-        <div className='button-group'><button onClick={handleCopyCharacter} aria-label='Reroll slime'>Copy Slime to Clipboard</button></div>
+        <div className='button-group'><button onClick={handleCopyCharacter} aria-label='Copy slime to clipboard' className='copy-button'>
+          <span key={copyCount} className={copyStatus === 'copied' ? 'fade-in' : ''}>
+            {copyStatus === 'copied' ? '✓ Copied!' : 'Copy Slime to Clipboard'}
+          </span>
+        </button>
+        </div>
         <div className='description' style={{ textAlign: 'center' }}><p>Version <strong>1.1</strong></p>
           <p>Created by  <a href="https://bsky.app/profile/wuggy.bsky.social">Ari-Matti 'Wuggy' Toivonen</a> </p></div>
       </div >
