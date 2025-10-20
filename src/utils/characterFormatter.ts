@@ -32,6 +32,6 @@ Your host body is ${getArticle(hostOccupation)} ${capitalize(hostOccupation)}.
 ${hostDescription}
 
 BELONGINGS
-${belongings.map(b => `• ${b}`).join('\n')}
+${belongings.map(b => `• ${capitalize(b)}`).join('\n')}
 `.trim();
 }
