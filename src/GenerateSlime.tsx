@@ -8,12 +8,28 @@ import {
     knowledgeSkills,
     type Skill
 } from './data/slimeSkills';
-import { useEffect, useState, forwardRef, useImperativeHandle, useCallback } from 'react';
+import { useEffect, forwardRef, useImperativeHandle, useCallback } from 'react';
 import { getArticle, capitalize } from './utils/textUtilities';
 import { RerollButton } from './utils/RerollButton';
 import { DICE, GENERATION } from './constants/gameConfig';
 import cornerdistress1 from './assets/corner_effects/Cornerdistress1.png'
 import cornerdistress2 from './assets/corner_effects/Cornerdistress2.png'
+
+interface GenerateSlimeProps {
+    traits: {
+        name: string;
+        color: string;
+        pattern: string;
+        accent: string;
+        texture: string;
+        title: { name: string; description: string }
+    }
+    skills: Skill[];
+    weaknesses: Skill[];
+    onUpdateTraits: (traits: GenerateSlimeProps['traits']) => void;
+    onUpdateSkills: (skills: Skill[]) => void;
+    onUpdateWeaknesses: (weaknesses: Skill[]) => void;
+}
 
 export interface SlimeHandle {
     regenerateSlime: (traitsToRegenerate?: {
@@ -26,32 +42,14 @@ export interface SlimeHandle {
     }) => void;
 }
 
-interface GenereteSlimeProps {
-    traits: {
-        name: string;
-        color: string;
-        pattern: string;
-        accent: string;
-        texture: string;
-        title: { name: string; description: string }
-    }
-    skills: Skill[];
-    weaknesses: Skill[];
-    
-}
-
-export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
-    const [traits, setTraits] = useState(() => ({
-        name: generateSlimeName(),
-        color: slimeColor[rollDice(DICE.SLIME_TRAIT)],
-        pattern: slimePattern[rollDice(DICE.SLIME_TRAIT)],
-        accent: slimeAccent[rollDice(DICE.SLIME_TRAIT)],
-        texture: slimeTexture[rollDice(DICE.SLIME_TRAIT)],
-        title: slimeTitles[rollDice(DICE.SLIME_TRAIT)]
-    }));
-
-    const [skills, setSkills] = useState<Skill[]>([]);
-    const [weaknesses, setWeaknesses] = useState<Skill[]>([]);
+export const GenerateSlime = forwardRef<SlimeHandle, GenerateSlimeProps>(({
+    traits,
+    skills,
+    weaknesses,
+    onUpdateSkills,
+    onUpdateWeaknesses,
+    onUpdateTraits
+}, ref) => {
 
     const regenerateSlime = (traitsToRegenerate?: {
         name?: boolean;
@@ -63,14 +61,14 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
     }) => {
         const regenAll = !traitsToRegenerate;
 
-        setTraits(prevTraits => ({
-            name: (regenAll || traitsToRegenerate?.name) ? generateSlimeName() : prevTraits.name,
-            color: (regenAll || traitsToRegenerate?.color) ? slimeColor[rollDice(DICE.SLIME_TRAIT)] : prevTraits.color,
-            pattern: (regenAll || traitsToRegenerate?.pattern) ? slimePattern[rollDice(DICE.SLIME_TRAIT)] : prevTraits.pattern,
-            accent: (regenAll || traitsToRegenerate?.accent) ? slimeAccent[rollDice(DICE.SLIME_TRAIT)] : prevTraits.accent,
-            texture: (regenAll || traitsToRegenerate?.texture) ? slimeTexture[rollDice(DICE.SLIME_TRAIT)] : prevTraits.texture,
-            title: (regenAll || traitsToRegenerate?.title) ? slimeTitles[rollDice(DICE.SLIME_TRAIT)] : prevTraits.title
-        }));
+        onUpdateTraits({
+            name: (regenAll || traitsToRegenerate?.name) ? generateSlimeName() : traits.name,
+            color: (regenAll || traitsToRegenerate?.color) ? slimeColor[rollDice(DICE.SLIME_TRAIT)] : traits.color,
+            pattern: (regenAll || traitsToRegenerate?.pattern) ? slimePattern[rollDice(DICE.SLIME_TRAIT)] : traits.pattern,
+            accent: (regenAll || traitsToRegenerate?.accent) ? slimeAccent[rollDice(DICE.SLIME_TRAIT)] : traits.accent,
+            texture: (regenAll || traitsToRegenerate?.texture) ? slimeTexture[rollDice(DICE.SLIME_TRAIT)] : traits.texture,
+            title: (regenAll || traitsToRegenerate?.title) ? slimeTitles[rollDice(DICE.SLIME_TRAIT)] : traits.title
+        });
     };
 
     useImperativeHandle(ref, () => ({
@@ -184,12 +182,12 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
 
         // Update state based on what was regenerated
         if (mode === 'all') {
-            setSkills(newSkills);
-            setWeaknesses(newWeaknesses);
+            onUpdateSkills(newSkills);
+            onUpdateWeaknesses(newWeaknesses);
         } else if (mode === 'skills') {
-            setSkills(newSkills);
+            onUpdateSkills(newSkills);
         } else if (mode === 'weaknesses') {
-            setWeaknesses(newWeaknesses);
+            onUpdateWeaknesses(newWeaknesses);
         }
     }, [skills, weaknesses, traits.title.name]);
 
@@ -211,10 +209,10 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
                         <div className='slime-header'>
                             <h2 className='slime-name'>
                                 <strong>{traits.name.toUpperCase()}</strong>
-                            </h2><RerollButton onClick={() => setTraits({ ...traits, name: generateSlimeName() })} style={{ fontSize: '1.5rem' }} />
+                            </h2><RerollButton onClick={() => onUpdateTraits({ ...traits, name: generateSlimeName() })} style={{ fontSize: '1.5rem' }} />
                         </div>
                         <div className='slime-header title'>
-                            <RerollButton onClick={() => setTraits({ ...traits, title: slimeTitles[rollDice(DICE.SLIME_TRAIT)] })} style={{ fontSize: '1.5rem' }} />
+                            <RerollButton onClick={() => onUpdateTraits({ ...traits, title: slimeTitles[rollDice(DICE.SLIME_TRAIT)] })} style={{ fontSize: '1.5rem' }} />
                             <h2 className='slime-title'>
                                 the {traits.title.name.toUpperCase()}
                             </h2>
@@ -233,22 +231,22 @@ export const GenerateSlime = forwardRef<SlimeHandle>((_props, ref) => {
                         <p>{capitalize(getArticle(traits.color[0]))}{' '}
                             <span className='no-wrap'>
                                 <strong className='highlight'>{traits.color}</strong>
-                                <RerollButton onClick={() => setTraits({ ...traits, color: slimeColor[rollDice(DICE.SLIME_TRAIT)] })} />
+                                <RerollButton onClick={() => onUpdateTraits({ ...traits, color: slimeColor[rollDice(DICE.SLIME_TRAIT)] })} />
                             </span>
                             {' '}slime, patterned with{' '}
                             <span className='no-wrap'>
                                 <strong className='highlight'>{traits.accent}</strong>
-                                <RerollButton onClick={() => setTraits({ ...traits, accent: slimeAccent[rollDice(DICE.SLIME_TRAIT)] })} />
+                                <RerollButton onClick={() => onUpdateTraits({ ...traits, accent: slimeAccent[rollDice(DICE.SLIME_TRAIT)] })} />
                             </span>
                             ,{' '}
                             <span className='no-wrap'>
                                 <strong className='highlight'>{traits.pattern}</strong>
-                                <RerollButton onClick={() => setTraits({ ...traits, pattern: slimePattern[rollDice(DICE.SLIME_TRAIT)] })} />
+                                <RerollButton onClick={() => onUpdateTraits({ ...traits, pattern: slimePattern[rollDice(DICE.SLIME_TRAIT)] })} />
                             </span>
                             {' '}accents, with {getArticle(traits.texture[0])}{' '}
                             <span className='no-wrap'>
                                 <strong className='highlight'>{traits.texture}</strong>
-                                <RerollButton onClick={() => setTraits({ ...traits, texture: slimeTexture[rollDice(DICE.SLIME_TRAIT)] })} />
+                                <RerollButton onClick={() => onUpdateTraits({ ...traits, texture: slimeTexture[rollDice(DICE.SLIME_TRAIT)] })} />
                             </span>
                             {' '}surface.</p>
                     </div>

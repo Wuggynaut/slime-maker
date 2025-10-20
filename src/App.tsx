@@ -2,11 +2,45 @@ import './App.css'
 import { GenerateHost, type HostHandle } from './GenerateHost'
 //import { GenerateMission } from './GenerateMission';
 import { GenerateSlime, type SlimeHandle } from './GenerateSlime';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { FaDice } from "react-icons/fa";
+import { DICE } from './constants/gameConfig';
 import logo from './assets/logo.png'
+import { generateSlimeName } from './utils/slimeNameGenerator';
+import { slimeAccent, slimeColor, slimePattern, slimeTexture } from './data/slimeTraits';
+import { slimeTitles } from './data/slimeTitles';
+import { rollDice } from './utils/diceRoller';
+import type { Skill } from './data/slimeSkills';
+import { hostBodies, type HostBody } from './data/hostBodies';
+import { hostEyes, hostFace, hostHair, hostHairColor, hostMouth, hostNose, hostPhysique, type HostTraits } from './data/hostTraits';
+import { formatCharacterForClipboard } from './utils/characterFormatter';
+import { generateHostDescription } from './utils/hostDescription';
 
 function App() {
+  const [slimeTraits, setSlimeTraits] = useState(() => ({
+    name: generateSlimeName(),
+    color: slimeColor[rollDice(DICE.SLIME_TRAIT)],
+    pattern: slimePattern[rollDice(DICE.SLIME_TRAIT)],
+    accent: slimeAccent[rollDice(DICE.SLIME_TRAIT)],
+    texture: slimeTexture[rollDice(DICE.SLIME_TRAIT)],
+    title: slimeTitles[rollDice(DICE.SLIME_TRAIT)]
+  }));
+
+  const [slimeSkills, setSlimeSkills] = useState<Skill[]>([]);
+  const [slimeWeaknesses, setSlimeWeaknesses] = useState<Skill[]>([]);
+
+  const [hostBody, setHostBody] = useState<HostBody>(hostBodies[rollDice(DICE.HOST_BODY)]);
+  const [hostTraits, setHostTraits] = useState<HostTraits>(() => ({
+    physique: hostPhysique[rollDice(DICE.HOST_TRAIT)],
+    hair: hostHair[rollDice(DICE.HOST_TRAIT)],
+    hairColor: hostHairColor[rollDice(DICE.HOST_TRAIT)],
+    face: hostFace[rollDice(DICE.HOST_TRAIT)],
+    eyes: hostEyes[rollDice(DICE.HOST_TRAIT)],
+    mouth: hostMouth[rollDice(DICE.HOST_TRAIT)],
+    nose: hostNose[rollDice(DICE.HOST_TRAIT)],
+    selectedFacePart: rollDice(DICE.FACE_FEATURE) as 1 | 2 | 3
+  }));
+
   const slimeRef = useRef<SlimeHandle>(null);
   const bodyRef = useRef<HostHandle>(null);
 
@@ -17,6 +51,24 @@ function App() {
   const handleRerollBody = () => {
     bodyRef.current?.generateBody();
   };
+
+  const handleCopyCharacter = async () => {
+    const text = formatCharacterForClipboard(
+      slimeTraits.name,
+      slimeTraits.title.name,
+      slimeTraits.title.description,
+      slimeTraits.color,
+      slimeTraits.accent,
+      slimeTraits.pattern,
+      slimeTraits.texture,
+      slimeSkills,
+      slimeWeaknesses,
+      hostBody.occupation,
+      generateHostDescription(hostTraits),
+      hostBody.belongings
+    );
+    await navigator.clipboard.writeText(text);
+  }
 
   return (
     <div>
@@ -50,10 +102,28 @@ function App() {
         </div>
 
         <div className='content-grid'>
-          <GenerateSlime ref={slimeRef} />
-          <GenerateHost ref={bodyRef} />
-        </div>
+          <GenerateSlime
+            ref={slimeRef}
+            traits={slimeTraits}
+            skills={slimeSkills}
+            weaknesses={slimeWeaknesses}
+            onUpdateSkills={setSlimeSkills}
+            onUpdateWeaknesses={setSlimeWeaknesses}
+            onUpdateTraits={setSlimeTraits}
+          />
+          <GenerateHost
+            ref={bodyRef}
+            body={hostBody}
+            traits={hostTraits}
+            onUpdateBody={setHostBody}
+            onUpdateTraits={setHostTraits}
+          />
 
+
+        </div>
+        <div className='button-group'><button onClick={handleCopyCharacter} aria-label='Reroll slime'>Copy Slime to Clipboard</button></div>
+        <div className='description' style={{ textAlign: 'center' }}><p>Version <strong>1.1</strong></p>
+          <p>Created by  <a href="https://bsky.app/profile/wuggy.bsky.social">Ari-Matti 'Wuggy' Toivonen</a> </p></div>
       </div >
     </div>
   )

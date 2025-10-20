@@ -88,3 +88,14 @@ export const hostNose: Record<number, string> = {
     9: 'broken',
     10: 'red'
 }
+
+export interface HostTraits {
+    physique: string;
+    hair: string;
+    hairColor: string;
+    face: string;
+    eyes: string;
+    mouth: string;
+    nose: string;
+    selectedFacePart: 1 | 2 | 3;
+}

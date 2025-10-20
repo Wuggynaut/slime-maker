@@ -1,4 +1,4 @@
-import { getArticle, capitalize } from "./textUtilities"
+import { getArticle, capitalize, capitalizeAll } from "./textUtilities"
 
 export const formatCharacterForClipboard = (
     slimeName: string,
@@ -15,26 +15,23 @@ export const formatCharacterForClipboard = (
     belongings: string[]
 ) => {
     return `
-    ${slimeName.toUpperCase}
-    the ${slimeTitle.toUpperCase}
+${slimeName.toUpperCase()} , the ${capitalizeAll(slimeTitle)}
+${titleDescription}
 
-    ${titleDescription}
+APPEARANCE
+${capitalize(getArticle(color))} ${color} slime, patterned with ${accent}, ${pattern} accents, with ${getArticle(texture)} ${texture} surface.
 
-    APPEARANCE
-    ${capitalize(getArticle(color))} ${color} slime, patterned with ${accent}, ${pattern} accents, with ${getArticle(texture)} ${texture} surface.
+SKILLS
+${skills.length === 0 ? '• None' : skills.map(s => `• ${s.name}`).join('\n')}
 
-    SKILLS
-    ${skills.length === 0 ? '• None' : skills.map(s => `• ${s.name}`).join('\n')}
+WEAKNESSES
+${weaknesses.map(w => `• ${w.name}`).join('\n')}
+───────────────────────────────────────
+HOST BODY
+Your host body is ${getArticle(hostOccupation)} ${capitalize(hostOccupation)}.
+${hostDescription}
 
-    WEAKNESSES
-    ${weaknesses.map(w => `• ${w.name}`).join('\n')}
-
-    ───────────────────────────────────────
-    HOST BODY: ${capitalize(hostOccupation)}
-
-    ${hostDescription}
-
-    BELONGINGS
-    ${belongings.map(b => `• ${b}`).join('\n')}
-    `.trim();
+BELONGINGS
+${belongings.map(b => `• ${b}`).join('\n')}
+`.trim();
 }
