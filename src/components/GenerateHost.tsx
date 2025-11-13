@@ -1,6 +1,6 @@
 import { forwardRef, useImperativeHandle } from 'react';
-import { rollDice } from './utils/diceroller';
-import { type HostBody, hostBodies } from './data/hostBodies';
+import { rollDice } from '../utils/diceroller';
+import { type HostBody, hostBodies } from '../data/hostBodies';
 import {
     hostHair,
     hostHairColor,
@@ -10,13 +10,13 @@ import {
     hostMouth,
     hostNose,
     type HostTraits
-} from './data/hostTraits'
-import { RerollButton } from './utils/RerollButton';
-import { getArticle, capitalize } from './utils/textUtilities';
-import { DICE } from './constants/gameConfig';
-import cornerdistress3 from './assets/corner_effects/Cornerdistress3.png'
-import cornerdistress4 from './assets/corner_effects/Cornerdistress4.png'
-import { generateHostDescription } from './utils/hostDescription';
+} from '../data/hostTraits'
+import { RerollButton } from '../utils/RerollButton';
+import { getArticle, capitalize } from '../utils/textUtilities';
+import { DICE } from '../constants/gameConfig';
+import cornerdistress3 from '../assets/corner_effects/Cornerdistress3.png'
+import cornerdistress4 from '../assets/corner_effects/Cornerdistress4.png'
+import { generateHostDescription } from '../utils/hostDescription';
 
 interface GenerateHostProps {
     body: HostBody;

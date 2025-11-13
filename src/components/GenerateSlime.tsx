@@ -1,19 +1,19 @@
-import { slimeTitles } from './data/slimeTitles';
-import { slimeAccent, slimeColor, slimePattern, slimeTexture } from './data/slimeTraits';
-import { rollDice } from './utils/diceroller';
-import { generateSlimeName } from './utils/slimeNameGenerator';
+import { slimeTitles } from '../data/slimeTitles';
+import { slimeAccent, slimeColor, slimePattern, slimeTexture } from '../data/slimeTraits';
+import { rollDice } from '../utils/diceroller';
+import { generateSlimeName } from '../utils/slimeNameGenerator';
 import {
     physicalSkills,
     socialSkills,
     knowledgeSkills,
     type Skill
-} from './data/slimeSkills';
+} from '../data/slimeSkills';
 import { useEffect, forwardRef, useImperativeHandle, useCallback } from 'react';
-import { getArticle, capitalize } from './utils/textUtilities';
-import { RerollButton } from './utils/RerollButton';
-import { DICE, GENERATION } from './constants/gameConfig';
-import cornerdistress1 from './assets/corner_effects/Cornerdistress1.png'
-import cornerdistress2 from './assets/corner_effects/Cornerdistress2.png'
+import { getArticle, capitalize } from '../utils/textUtilities';
+import { RerollButton } from '../utils/RerollButton';
+import { DICE, GENERATION } from '../constants/gameConfig';
+import cornerdistress1 from '../assets/corner_effects/Cornerdistress1.png'
+import cornerdistress2 from '../assets/corner_effects/Cornerdistress2.png'
 
 interface GenerateSlimeProps {
     traits: {

@@ -6,10 +6,10 @@ import {
     missionLocation,
     missionLocationFeature,
     missionComplication
-} from './data/missionData'
-import { getMissionText, type MissionParams, type MissionType } from './data/missionTemplates';
-import { rollD6 } from './utils/diceroller';
-import { capitalize, capitalizeAll } from './utils/textUtilities'
+} from '../data/missionData'
+import { getMissionText, type MissionParams, type MissionType } from '../data/missionTemplates';
+import { rollD6 } from '../utils/diceroller';
+import { capitalize, capitalizeAll } from '../utils/textUtilities'
 
 export function GenerateMission() {
     const rollFromArray = <T,>(array: T[]): T => {
