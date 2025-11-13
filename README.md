@@ -24,37 +24,6 @@ The skill generation system ensures no duplicates between skills and weaknesses 
 ### Visual Design
 The grainy texture effect is achieved using SVG filters with fractal noise.
 
-## Running locally
-
-### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
-
-### Installation
-
-1. Clone the repository
-```bash
-git clone [your-repo-url]
-cd slime-maker
-```
-
-2. Install dependencies
-```bash
-npm install
-```
-
-3. Run the development server
-```bash
-npm run dev
-```
-
-4. Open your browser to `http://localhost:5173/slime-maker/`
-
-### Building for Production
-```bash
-npm run build
-```
-
 ## Possible Future Additions
 
 - Add character export/save functionality
