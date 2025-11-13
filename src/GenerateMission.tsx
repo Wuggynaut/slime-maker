@@ -8,7 +8,7 @@ import {
     missionComplication
 } from './data/missionData'
 import { getMissionText, type MissionParams, type MissionType } from './data/missionTemplates';
-import { rollD6 } from './utils/diceRoller';
+import { rollD6 } from './utils/diceroller';
 import { capitalize, capitalizeAll } from './utils/textUtilities'
 
 export function GenerateMission() {

@@ -1,5 +1,5 @@
 import { forwardRef, useImperativeHandle } from 'react';
-import { rollDice } from './utils/diceRoller';
+import { rollDice } from './utils/diceroller';
 import { type HostBody, hostBodies } from './data/hostBodies';
 import {
     hostHair,

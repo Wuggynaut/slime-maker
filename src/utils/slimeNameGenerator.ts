@@ -1,4 +1,4 @@
-import { rollDice } from './diceRoller';
+import { rollDice } from './diceroller';
 import {
     slimeNamePart1, slimeNamePart2, slimeNamePart3, slimeNamePart4
 } from '../data/slimeNames';

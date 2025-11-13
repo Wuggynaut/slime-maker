@@ -1,7 +1,7 @@
 import { type Target, type Location } from './missionData';
 import { getArticle, capitalize } from '../utils/textUtilities'
 import { hostBodies } from '../data/hostBodies';
-import { rollDice } from '../utils/diceRoller';
+import { rollDice } from '../utils/diceroller';
 
 export type MissionType = 'sabotage' | 'steal' | 'study' | 'eliminate' | 'protect' | 'infiltrate';
 

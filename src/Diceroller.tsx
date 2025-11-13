@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { rollDice, parseDieFormula, type DieGroup } from "./utils/diceRoller"
+import { rollDice, parseDieFormula, type DieGroup } from "./utils/diceroller"
 
 export function Diceroller() {
     const [dieResult, setDieResult] = useState('');

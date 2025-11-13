@@ -1,6 +1,6 @@
 import { slimeTitles } from './data/slimeTitles';
 import { slimeAccent, slimeColor, slimePattern, slimeTexture } from './data/slimeTraits';
-import { rollDice } from './utils/diceRoller';
+import { rollDice } from './utils/diceroller';
 import { generateSlimeName } from './utils/slimeNameGenerator';
 import {
     physicalSkills,

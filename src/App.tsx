@@ -9,7 +9,7 @@ import logo from './assets/logo.png'
 import { generateSlimeName } from './utils/slimeNameGenerator';
 import { slimeAccent, slimeColor, slimePattern, slimeTexture } from './data/slimeTraits';
 import { slimeTitles } from './data/slimeTitles';
-import { rollDice } from './utils/diceRoller';
+import { rollDice } from './utils/diceroller';
 import type { Skill } from './data/slimeSkills';
 import { hostBodies, type HostBody } from './data/hostBodies';
 import { hostEyes, hostFace, hostHair, hostHairColor, hostMouth, hostNose, hostPhysique, type HostTraits } from './data/hostTraits';
