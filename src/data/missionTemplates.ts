@@ -297,7 +297,7 @@ const getComplicationContext = (complication: string, missionType: MissionType, 
     // Handle technical malfunction specially
     if (complication === 'technical malfunction') {
         const malfunction = malfunctionTypes[rollD6()];
-        return `A ${getArticle(malfunction)} ${malfunction} is affecting the target location.`;
+        return `${capitalize(getArticle(malfunction))} ${malfunction} is affecting the target location.`;
     }
 
     if (complication === 'unwanted attention') {
