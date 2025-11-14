@@ -1,5 +1,7 @@
+import { HashRouter, NavLink, Route, Routes } from 'react-router-dom';
 import './App.css'
 import { GeneratorPage } from './pages/GeneratorPage';
+import { MissionPage } from './pages/MissionPage';
 
 function App() {
 
@@ -16,8 +18,19 @@ function App() {
       </svg>
 
       <div className='grainy-background' />
-
-      <GeneratorPage />
+      <HashRouter>
+        <nav>
+          <NavLink to='/'>The Slime Maker</NavLink>
+          <NavLink to='/mission-maker'>The Mission Maker</NavLink>
+        </nav>
+        <Routes>
+          <Route path='/' element={<GeneratorPage />} />
+          <Route path='/mission-maker' element={<MissionPage />} />
+        </Routes>
+      </HashRouter>
+      <div className='description' style={{ textAlign: 'center' }}><p>Version <strong>1.2</strong></p>
+        <p>Created by  <a href="https://bsky.app/profile/wuggy.bsky.social">Ari-Matti 'Wuggy' Toivonen</a> </p>
+      </div>
     </div>
   )
 }

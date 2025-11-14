@@ -73,7 +73,7 @@ export function GeneratorPage() {
 
     return (
         <div>
-            <div className='slime-sheet'>
+            <div className='sheet'>
                 <div style={{ textAlign: 'center' }}>
                     <h1 className='header-title'>THE SLIME MAKER</h1>
                     <div className='description'><strong>A character generator for</strong></div>

@@ -14,9 +14,8 @@ import {
 import { RerollButton } from '../utils/RerollButton';
 import { getArticle, capitalize } from '../utils/textUtilities';
 import { DICE } from '../constants/gameConfig';
-import cornerdistress3 from '../assets/corner_effects/Cornerdistress3.png'
-import cornerdistress4 from '../assets/corner_effects/Cornerdistress4.png'
 import { generateHostDescription } from '../utils/hostDescription';
+import { CornerDistress } from '../utils/CornerDistress';
 
 interface GenerateHostProps {
     body: HostBody;
@@ -58,12 +57,7 @@ export const GenerateHost = forwardRef<HostHandle, GenerateHostProps>(({ body, t
             <section className='card left-col'>
 
                 <div className='card-content'>
-                    <img
-                        src={cornerdistress3}
-                        alt=""
-                        aria-hidden="true"
-                        className="corner bottom-left"
-                    />
+                    <CornerDistress bottomLeft />
                     <h2 className='card-header'>Host body</h2>
                     <div className='description'>
                         <p>Your host body is {getArticle(body.occupation)} <strong className='highlight'>{body.occupation}</strong> <RerollButton onClick={() => onUpdateBody(hostBodies[rollDice(DICE.HOST_BODY)])} />.</p>
@@ -73,12 +67,7 @@ export const GenerateHost = forwardRef<HostHandle, GenerateHostProps>(({ body, t
             </section>
             <section className='card right-col'>
                 <div className='card-content'>
-                    <img
-                        src={cornerdistress4}
-                        alt=""
-                        aria-hidden="true"
-                        className="corner bottom-right"
-                    />
+                    <CornerDistress bottomRight />
                     <h2 className='card-header'>Belongings</h2>
                     {body.belongings.map((s, index) => (
                         <div key={s}>

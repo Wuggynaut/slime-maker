@@ -8,12 +8,11 @@ import {
     knowledgeSkills,
     type Skill
 } from '../data/slimeSkills';
-import { useEffect, forwardRef, useImperativeHandle, useCallback } from 'react';
+import { forwardRef, useImperativeHandle, useCallback } from 'react';
 import { getArticle, capitalize } from '../utils/textUtilities';
 import { RerollButton } from '../utils/RerollButton';
 import { DICE, GENERATION } from '../constants/gameConfig';
-import cornerdistress1 from '../assets/corner_effects/Cornerdistress1.png'
-import cornerdistress2 from '../assets/corner_effects/Cornerdistress2.png'
+import { CornerDistress } from '../utils/CornerDistress';
 
 interface GenerateSlimeProps {
     traits: {
@@ -61,15 +60,23 @@ export const GenerateSlime = forwardRef<SlimeHandle, GenerateSlimeProps>(({
     }) => {
         const regenAll = !traitsToRegenerate;
 
-        onUpdateTraits({
+        const newTraits = {
             name: (regenAll || traitsToRegenerate?.name) ? generateSlimeName() : traits.name,
             color: (regenAll || traitsToRegenerate?.color) ? slimeColor[rollDice(DICE.SLIME_TRAIT)] : traits.color,
             pattern: (regenAll || traitsToRegenerate?.pattern) ? slimePattern[rollDice(DICE.SLIME_TRAIT)] : traits.pattern,
             accent: (regenAll || traitsToRegenerate?.accent) ? slimeAccent[rollDice(DICE.SLIME_TRAIT)] : traits.accent,
             texture: (regenAll || traitsToRegenerate?.texture) ? slimeTexture[rollDice(DICE.SLIME_TRAIT)] : traits.texture,
             title: (regenAll || traitsToRegenerate?.title) ? slimeTitles[rollDice(DICE.SLIME_TRAIT)] : traits.title
-        });
+        };
+
+        onUpdateTraits(newTraits);
+
+        // If title was regenerated, also regenerate skills
+        if (regenAll || traitsToRegenerate?.title) {
+            regenerateSkills('all', newTraits.title.name);  // ← Pass new title here!
+        }
     };
+
 
     useImperativeHandle(ref, () => ({
         regenerateSlime
@@ -100,7 +107,8 @@ export const GenerateSlime = forwardRef<SlimeHandle, GenerateSlimeProps>(({
      * - Embryonic: 1 from each category
      * - Prince: No skills (intentionally empty)
      */
-    const regenerateSkills = useCallback((mode: 'skills' | 'weaknesses' | 'all') => {
+    const regenerateSkills = useCallback((mode: 'skills' | 'weaknesses' | 'all',
+        titleNameOverride?: string) => {
         const newSkills: Skill[] = [];
         const newWeaknesses: Skill[] = [];
         // Track used skills to prevent duplicates between skills and weaknesses
@@ -147,7 +155,9 @@ export const GenerateSlime = forwardRef<SlimeHandle, GenerateSlimeProps>(({
 
         if (mode === 'skills' || mode === 'all') {
             // Generate skills based on slime title's specialization
-            switch (traits.title.name) {
+            const titleName = titleNameOverride || traits.title.name;
+
+            switch (titleName) {
                 case 'Sabotage Slime':
                     twoFromCategoryPlusRandom(physicalSkills);
                     break;
@@ -191,20 +201,13 @@ export const GenerateSlime = forwardRef<SlimeHandle, GenerateSlimeProps>(({
         }
     }, [skills, weaknesses, traits.title.name]);
 
-    useEffect(() => {
-        regenerateSkills('all');
-    }, [traits.title.name]);
+
 
     return (
         <>
             <section className='card left-col'>
                 <div className='card-content'>
-                    <img
-                        src={cornerdistress1}
-                        alt=""
-                        aria-hidden="true"
-                        className="corner top-left"
-                    />
+                    <CornerDistress topLeft />
                     <div style={{ maxWidth: '400px', margin: '0 auto' }}>
                         <div className='slime-header'>
                             <h2 className='slime-name'>
@@ -212,7 +215,10 @@ export const GenerateSlime = forwardRef<SlimeHandle, GenerateSlimeProps>(({
                             </h2><RerollButton onClick={() => onUpdateTraits({ ...traits, name: generateSlimeName() })} style={{ fontSize: '1.5rem' }} />
                         </div>
                         <div className='slime-header title'>
-                            <RerollButton onClick={() => onUpdateTraits({ ...traits, title: slimeTitles[rollDice(DICE.SLIME_TRAIT)] })} style={{ fontSize: '1.5rem' }} />
+                            <RerollButton
+                                onClick={() => regenerateSlime({ title: true })}
+                                style={{ fontSize: '1.5rem' }}
+                            />
                             <h2 className='slime-title'>
                                 the {traits.title.name.toUpperCase()}
                             </h2>
@@ -254,12 +260,7 @@ export const GenerateSlime = forwardRef<SlimeHandle, GenerateSlimeProps>(({
             </section>
             <section className='card right-col'>
                 <div className='card-content'>
-                    <img
-                        src={cornerdistress2}
-                        alt=""
-                        aria-hidden="true"
-                        className="corner top-right"
-                    />
+                    <CornerDistress topRight />
                     <div className='card-header-group'>
                         <div style={{ width: '1.2rem' }} />
                         <h2 className='card-header'>Skills </h2>
